@@ -60,14 +60,11 @@ jobs:
           git pull
       - name: YQ example!
         runs-on: ubuntu-latest
-
-        steps:
-        - uses: actions/checkout@v1
-        - uses: chrisdickinson/setup-yq@latest
-      - name: Show folks how to run YQ:
-          run: |
-            yq eval -i '.image.tag = "tag2123"' http-server/values.yaml
-            echo "http-server image tag updated"
+        uses: actions/checkout@v1
+        uses: chrisdickinson/setup-yq@latest
+        run: |
+          yq eval -i '.image.tag = "tag2123"' http-server/values.yaml
+          echo "http-server image tag updated"
       # - name: Update Helm Chart
       #   run: |
       #     yq eval -i '.image.tag = "tag2123"' http-server/values.yaml
