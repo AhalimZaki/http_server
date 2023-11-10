@@ -55,7 +55,7 @@ jobs:
 
       - name: Update Helm Chart
         run: |
-          yq eval -i '.image.tag = "tag2123"' http-server/values.yaml
+          yq eval -i '.image.tag = "ruby-${{ github.sha }}"' http-server/values.yaml
           echo "http-server image tag updated"
 
       - name: Commit and Push Changes
