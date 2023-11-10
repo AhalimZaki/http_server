@@ -59,8 +59,6 @@ jobs:
           git checkout main
           git pull
       - name: YQ example!
-        runs-on: ubuntu-latest
-        uses: actions/checkout@v1
         uses: chrisdickinson/setup-yq@latest
         run: |
           yq eval -i '.image.tag = "tag2123"' http-server/values.yaml
