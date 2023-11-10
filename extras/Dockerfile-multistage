@@ -1,0 +1,24 @@
+#Stage 1 build
+FROM ruby:3.3-rc as build1
+
+RUN adduser -D -h /home/app -s /bin/sh -u 1001 app
+
+WORKDIR /home/app
+
+COPY --chown=app:app http_server.rb /home/app/
+
+USER app
+
+
+#Stage 2 Final build
+FROM ruby:3.3-rc
+
+COPY --from=build1 /home/app home/app
+
+WORKDIR /home/app
+
+USER app
+
+ENV WEB_PORT=8080
+
+CMD [ "ruby", "/home/app/http_server.rb" ]
