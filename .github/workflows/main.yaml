@@ -40,16 +40,15 @@ jobs:
   update:
     runs-on: ubuntu-latest
     steps:
-      - uses: chrisdickinson/setup-yq@latest
       - name: Checkout code
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v2
 
-      # - name: Install yq
-      #   run: |
-          # apt-get update
-          # apt-get install -y wget
-          # wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq &&\
-          # chmod +x /usr/bin/yq
+      - name: Install yq
+        run: |
+          wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq &&\
+          chmod +x /usr/bin/yq
+#          apt-get update
+#          apt-get install -y wget
 
       - name: Clone Repository
         run: |
@@ -59,14 +58,11 @@ jobs:
           git config --global user.name "ruby"
           git checkout main
           git pull
-      - name: YQ example!
+
+      - name: Update Helm Chart
         run: |
           yq eval -i '.image.tag = "tag2123"' http-server/values.yaml
           echo "http-server image tag updated"
-      # - name: Update Helm Chart
-      #   run: |
-      #     yq eval -i '.image.tag = "tag2123"' http-server/values.yaml
-      #     echo "http-server image tag updated"
 
       - name: Commit and Push Changes
         run: |
