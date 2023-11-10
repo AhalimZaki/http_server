@@ -1,84 +1,71 @@
-name: Build, Push, and Deploy
+# name: Build, Push, and Deploy
 
-on:
-  push:
-    branches:
-      - main
+# on:
+#   push:
+#     branches:
+#       - main
 
-jobs:
-  build_and_push:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v2
+# jobs:
+#   build_and_push:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Check out code
+#         uses: actions/checkout@v2
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
+#       - name: Set up QEMU
+#         uses: docker/setup-qemu-action@v1
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+#       - name: Set up Docker Buildx
+#         uses: docker/setup-buildx-action@v1
 
-      - name: Build Docker image
-        run: |
-          docker build -t http-servers:ruby-${{ github.sha }} .
-        env:
-          DOCKER_CLI: docker
+#       - name: Build Docker image
+#         run: |
+#           docker build -t http-servers:ruby-${{ github.sha }} .
+#         env:
+#           DOCKER_CLI: docker
 
           
-      - name: Login to ECR
-        id: ecr
-        uses: jwalton/gh-ecr-login@v1
-        with:
-          access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          region: eu-north-1
-      - name: Push to ECR
+#       - name: Login to ECR
+#         id: ecr
+#         uses: jwalton/gh-ecr-login@v1
+#         with:
+#           access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#           region: eu-north-1
+#       - name: Push to ECR
+#         run: |
+#           docker tag http-servers:ruby-${{ github.sha }} 648264488158.dkr.ecr.eu-north-1.amazonaws.com/http-servers:ruby-${{ github.sha }}
+#           docker push 648264488158.dkr.ecr.eu-north-1.amazonaws.com/http-servers:ruby-${{ github.sha }}
+
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install yq
         run: |
-          docker tag http-servers:ruby-${{ github.sha }} 648264488158.dkr.ecr.eu-north-1.amazonaws.com/http-servers:ruby-${{ github.sha }}
-          docker push 648264488158.dkr.ecr.eu-north-1.amazonaws.com/http-servers:ruby-${{ github.sha }}
+          apt-get update
+          apt-get install -y wget
+          wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq
+          chmod +x /usr/bin/yq
 
-      # - name: Tag Docker image
-      #   run: |
-      #     docker tag http-servers:ruby-${{ github.sha }} 648264488158.dkr.ecr.eu-north-1.amazonaws.com/http-servers:ruby-${{ github.sha }}
-      #   env:
-      #     DOCKER_CLI: docker
+      - name: Clone Repository
+        run: |
+          git clone https://helm-update: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@github.com/andrewseif/http_server.git
+          cd http_server
+          git config --global user.email "ruby@pipeline"
+          git config --global user.name "ruby"
+          git checkout main
+          git pull
 
-      # - name: Push Docker image to ECR
-      #   run: |
-      #     docker push 648264488158.dkr.ecr.eu-north-1.amazonaws.com/http-servers:ruby-${{ github.sha }}
-      #   env:
-      #     DOCKER_CLI: docker
+      - name: Update Helm Chart
+        run: |
+          yq eval -i '.image.tag = "tag2123"' http-server/values.yaml
+          echo "http-server image tag updated"
 
-
-  # update:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v2
-
-  #     - name: Install yq
-  #       run: |
-  #         apt-get update
-  #         apt-get install -y wget
-  #         wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq
-  #         chmod +x /usr/bin/yq
-
-  #     - name: Clone Repository
-  #       run: |
-  #         git clone https://helm-update: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@github.com/andrewseif/http_server.git
-  #         cd http_server
-  #         git config --global user.email "ruby@pipeline"
-  #         git config --global user.name "ruby"
-  #         git checkout main
-  #         git pull
-
-  #     - name: Update Helm Chart
-  #       run: |
-  #         yq -i '.[env(HTTP_SERVER)].image.tag |= "ruby-${{ github.sha }}"' http-server/values.yaml
-  #         echo "http-server image tag updated"
-
-  #     - name: Commit and Push Changes
-  #       run: |
-  #         git add .
-  #         git commit -m "Edit tag value for http-server image ruby-${{ github.sha }}"
-  #         git push origin main
+      - name: Commit and Push Changes
+        run: |
+          git add .
+          git commit -m "Edit tag value for http-server image ruby-${{ github.sha }}"
+          git push origin main
