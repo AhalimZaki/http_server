@@ -39,16 +39,18 @@ jobs:
 
   update:
     runs-on: ubuntu-latest
+    options: --user root
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install yq
+      - name: Install yq      
         run: |
+          apt-get update
+          apt-get install -y wget
           wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq &&\
           chmod +x /usr/bin/yq
-#          apt-get update
-#          apt-get install -y wget
+
 
       - name: Clone Repository
         run: |
