@@ -64,7 +64,7 @@ jobs:
         steps:
         - uses: actions/checkout@v1
         - uses: chrisdickinson/setup-yq@latest
-        - name: Show folks how to run YQ:
+      - name: Show folks how to run YQ:
           run: |
             yq eval -i '.image.tag = "tag2123"' http-server/values.yaml
             echo "http-server image tag updated"
