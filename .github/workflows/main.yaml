@@ -40,9 +40,10 @@ jobs:
   update:
     runs-on: ubuntu-latest
     steps:
+      - uses: chrisdickinson/setup-yq@latest
       - name: Checkout code
       - uses: actions/checkout@v2
-      - uses: chrisdickinson/setup-yq@latest
+
       # - name: Install yq
       #   run: |
           # apt-get update
