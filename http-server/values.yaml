@@ -35,7 +35,7 @@ readOnlyRootFilesystem: true
 runAsNonRoot: true
 runAsUser: 1000
 service:
-  type: LoadBalancer
+  type: NodePort
   port: 8080
   targetport: 8080
 ingress:
