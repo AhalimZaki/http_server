@@ -7,10 +7,9 @@ image:
   repository: 648264488158.dkr.ecr.eu-north-1.amazonaws.com/http-servers
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "ruby-f8b7d2015f55859bd2647157dc34e24322c57d05"
-imagePullSecrets: 
+  tag: "ruby-be7ecf72d184d0b41a651d4872882304d1080359"
+imagePullSecrets:
   - name: aws-secret
-
 nameOverride: ""
 fullnameOverride: ""
 serviceAccount:
@@ -28,14 +27,13 @@ podLabels: {}
 podSecurityContext: {}
 # fsGroup: 2000
 
-securityContext: 
+securityContext:
 capabilities:
   drop:
-  - ALL
+    - ALL
 readOnlyRootFilesystem: true
 runAsNonRoot: true
 runAsUser: 1000
-
 service:
   type: ClusterIP
   port: 8080
@@ -55,7 +53,6 @@ ingress:
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
-
 # We usually recommend not to specify default resources and to leave this as a conscious
 # choice for the user. This also increases chances charts run on environments with little
 # resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -67,9 +64,7 @@ limits:
 requests:
   cpu: 100m
   memory: 500Mi
-
 maxUnavailable: 1
-
 autoscaling:
   enabled: true
   minReplicas: 2
