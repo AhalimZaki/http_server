@@ -1,13 +1,12 @@
 {{- if .Values.maxUnavailable }}
 apiVersion: policy/v1
-{{- end }}
+{{- else}}
 kind: PodDisruptionBudget
 metadata:
-   name: {{ include "http-server.fullname" . }}
-
+   name: {{ include "myservice.fullname" . }}
 spec:
-  maxUnavailable: {{ .Values.maxUnavailable }}
+  maxUnavailable: {{ .Values.global.maxUnavailable }}
   selector:
     matchLabels:
-      {{- include "http-server.selectorLabels" . | nindent 6 }}
-{{- end }}
+      {{- include "myservice.selectorLabels" . | nindent 6 }}
+
