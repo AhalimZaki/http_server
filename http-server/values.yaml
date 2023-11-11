@@ -36,7 +36,7 @@ runAsNonRoot: true
 runAsUser: 1000
 service:
   type: LoadBalancer
-  port: 8000
+  port: 8080
   targetport: 8080
 ingress:
   enabled: true
