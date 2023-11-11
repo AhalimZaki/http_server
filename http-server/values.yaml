@@ -34,12 +34,16 @@ capabilities:
 readOnlyRootFilesystem: true
 runAsNonRoot: true
 runAsUser: 1000
+
+
 service:
   type: LoadBalancer
   port: 8080
   targetport: 8080
+
+
 ingress:
-  enabled: true
+  enabled: false
   className: ""
   annotations: {}
   # kubernetes.io/ingress.class: nginx
