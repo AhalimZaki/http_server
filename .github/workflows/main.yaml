@@ -47,7 +47,7 @@ jobs:
 
       - name: Clone Repository
         run: |
-          git clone https://helm-update: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@github.com/andrewseif/http_server.git
+          git clone https://${{ secrets.HELM_ACCESS_KEY }}:${{ secrets.HELM_SECRET_KEY }}@github.com/andrewseif/http_server.git
           cd http_server
           git config --global user.email "ruby@pipeline"
           git config --global user.name "ruby"
