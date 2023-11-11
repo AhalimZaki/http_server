@@ -7,7 +7,7 @@ image:
   repository: 648264488158.dkr.ecr.eu-north-1.amazonaws.com/http-servers
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "ruby-935dbf0fa2ed736a3245288034209ced5f27648b"
+  tag: "ruby-f343bd21e95abd6ecde624a8a641618a5b4de626"
 imagePullSecrets:
   - name: aws-secret
 nameOverride: ""
