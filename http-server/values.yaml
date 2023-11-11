@@ -47,7 +47,7 @@ ingress:
   hosts:
     - host: ""
       paths:
-        - path: /healthcheck
+        - path: /
           pathType: Prefix
   tls: []
   #  - secretName: chart-example-tls
